@@ -1,0 +1,114 @@
+/* Color Variables - Easy Theme Switching */
+:root {
+  /* Primary Colors - Neon Lime */
+  --primary-color: #B6FF3B; /* Neon Lime */
+  --primary-dark: #9AE026;
+  --primary-light: #C4FF5C;
+  
+  /* Secondary Colors - Cyan */
+  --secondary-color: #00FFFF; /* Cyan */
+  --secondary-dark: #00E0E0;
+  --secondary-light: #4DFFFF;
+  
+  /* Background Colors - Darker Night Blue */
+  --bg-primary: #0F1A38; /* Darker Night Blue */
+  --bg-secondary: #1A2548; /* Slightly Lighter Dark Blue */
+  --bg-tertiary: #2A3B68; /* Darker Steel Blue for Cards */
+  --bg-gradient: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  
+  /* Text Colors - Cloud Dancer */
+  --text-primary: #F0EEE9; /* Cloud Dancer */
+  --text-secondary: #E5E1DC;
+  --text-muted: #C7C2BD;
+  
+  /* Accent Colors - Enhanced palette */
+  --accent-red: #dc2626; /* Deeper Red */
+  --accent-red-light: #f87171; /* Light Red */
+  --accent-red-dark: #991b1b; /* Dark Red */
+  --accent-orange: #f59e0b; /* Subtle Orange hint */
+  --accent-orange-light: #fbbf24; /* Light Orange hint */
+  --accent-orange-dark: #d97706; /* Dark Orange hint */
+  --accent-green: #22c55e; /* Green */
+  --accent-yellow: #eab308; /* Yellow */
+  --accent-blue: #4169e1; /* Royal Blue */
+  --accent-blue-light: #6495ed; /* Light Royal Blue */
+  --accent-blue-dark: #1e3a8a; /* Dark Royal Blue */
+  --accent-purple: #4169e1; /* Royal Blue */
+  --accent-pink: #00FFFF; /* Cyan */
+  --accent-lime: #B6FF3B; /* Neon Lime */
+  --accent-violet: #2A3B68; /* Darker Steel Blue */
+  --accent-navy: #002366; /* Navy Blue */
+  --accent-dark-purple: #34018c; /* Dark Purple */
+  
+  /* Social Media Colors */
+  --twitch: #9146ff;
+  --youtube: #ff0000;
+  --twitter: #1da1f2;
+  --discord: #5865f2;
+  --instagram: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+  --tiktok: #ff0050;
+  
+  /* Effects */
+  --glow-primary: 0 0 20px rgba(182, 255, 59, 0.5);
+  --glow-secondary: 0 0 20px rgba(0, 255, 255, 0.5);
+  --glow-red: 0 0 20px rgba(220, 38, 38, 0.5);
+  --glow-red-light: 0 0 15px rgba(248, 113, 113, 0.4);
+  --glow-orange: 0 0 15px rgba(245, 158, 11, 0.3);
+  --glow-orange-light: 0 0 10px rgba(251, 191, 36, 0.2);
+  --glow-blue: 0 0 20px rgba(65, 105, 225, 0.5);
+  --glow-blue-light: 0 0 15px rgba(100, 149, 237, 0.4);
+  --glow-blue-dark: 0 0 20px rgba(30, 58, 138, 0.6);
+  --glow-pink: 0 0 25px rgba(0, 255, 255, 0.6);
+  --glow-lime: 0 0 25px rgba(182, 255, 59, 0.6);
+  --glow-violet: 0 0 20px rgba(42, 59, 104, 0.5);
+  --shadow-card: 0 4px 15px rgba(15, 26, 56, 0.6);
+  --border-radius: 12px;
+  --transition: all 0.3s ease;
+}
+
+/* Alternative Color Schemes (Uncomment to use) */
+
+/* Neon Gaming Theme */
+/*
+:root {
+  --primary-color: #00ff88;
+  --primary-dark: #00cc6a;
+  --primary-light: #4dffaa;
+  --secondary-color: #ff0080;
+  --secondary-dark: #cc0066;
+  --secondary-light: #ff4da6;
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #2a2a2a;
+}
+*/
+
+/* Retro Synthwave Theme */
+/*
+:root {
+  --primary-color: #ff006e;
+  --primary-dark: #cc0058;
+  --primary-light: #ff4d94;
+  --secondary-color: #ffbe0b;
+  --secondary-dark: #cc9809;
+  --secondary-light: #ffcb3d;
+  --bg-primary: #1a0033;
+  --bg-secondary: #2d0066;
+  --bg-tertiary: #4d0099;
+}
+*/
+
+/* Blue Ocean Theme */
+/*
+:root {
+  --primary-color: #0077be;
+  --primary-dark: #005fa3;
+  --primary-light: #4da6d9;
+  --secondary-color: #00a8cc;
+  --secondary-dark: #0086a3;
+  --secondary-light: #4dc4d9;
+  --bg-primary: #001122;
+  --bg-secondary: #002244;
+  --bg-tertiary: #003366;
+}
+*/
