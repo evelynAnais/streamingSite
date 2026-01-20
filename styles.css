@@ -347,22 +347,18 @@ body {
 }
 
 @keyframes float-compact {
-  0%, 100% {
-    transform: translateY(40px) rotate(0deg);
+  0% {
+    transform: translateY(120px) rotate(0deg);
     opacity: 0;
   }
-  10% {
-    opacity: 0.7;
+  15% {
+    opacity: 0.8;
   }
-  50% {
-    transform: translateY(15px) rotate(180deg);
-    opacity: 0.9;
-  }
-  90% {
-    opacity: 0.7;
+  85% {
+    opacity: 0.8;
   }
   100% {
-    transform: translateY(-10px) rotate(360deg);
+    transform: translateY(0px) rotate(360deg);
     opacity: 0;
   }
 }
@@ -409,26 +405,26 @@ body {
 .animated-header .wave {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  width: 300%;
   height: 30px;
-  animation: wave-movement 6s linear infinite;
+  animation: wave-movement 8s linear infinite;
 }
 
 .animated-header .wave-2 {
-  animation: wave-movement 8s linear infinite reverse;
+  animation: wave-movement 12s linear infinite reverse;
   opacity: 0.6;
 }
 
 .wave {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  width: 300%;
   height: 60px;
-  animation: wave-movement 8s linear infinite;
+  animation: wave-movement 10s linear infinite;
 }
 
 .wave-2 {
-  animation: wave-movement 12s linear infinite reverse;
+  animation: wave-movement 15s linear infinite reverse;
   opacity: 0.5;
 }
 
@@ -452,10 +448,10 @@ body {
 
 @keyframes wave-movement {
   0% {
-    transform: translateX(-100px);
+    transform: translateX(0);
   }
   100% {
-    transform: translateX(100px);
+    transform: translateX(-2400px);
   }
 }
 
