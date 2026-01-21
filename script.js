@@ -355,3 +355,167 @@ window.addEventListener('load', function () {
     heroContent.classList.add('fade-in-up');
   }
 });
+
+// Sparkle Effect System
+class SparkleSystem {
+  constructor() {
+    this.sparkles = [];
+    this.timeOnPage = 0;
+    this.sparkleContainer = null;
+    this.isScrolling = false;
+    this.scrollTimeout = null;
+    this.sparkleInterval = null;
+
+    this.init();
+  }
+
+  init() {
+    // Create sparkle container
+    this.sparkleContainer = document.createElement('div');
+    this.sparkleContainer.className = 'sparkle-container';
+    document.body.appendChild(this.sparkleContainer);
+
+    // Start time tracking
+    this.startTimeTracking();
+
+    // Setup scroll listener
+    this.setupScrollListener();
+
+    // Start sparkle generation
+    this.startSparkleGeneration();
+  }
+
+  startTimeTracking() {
+    setInterval(() => {
+      if (!this.isScrolling) {
+        this.timeOnPage += 0.1;
+      }
+    }, 100);
+  }
+
+  setupScrollListener() {
+    window.addEventListener('scroll', () => {
+      this.isScrolling = true;
+
+      // Fade existing sparkles on scroll
+      this.fadeSparklesOnScroll();
+
+      // Reset sparkle progression on scroll
+      this.resetSparkleProgression();
+
+      // Clear existing timeout
+      if (this.scrollTimeout) {
+        clearTimeout(this.scrollTimeout);
+      }
+
+      // Set scrolling to false after 150ms of no scrolling
+      this.scrollTimeout = setTimeout(() => {
+        this.isScrolling = false;
+      }, 150);
+    });
+  }
+
+  resetSparkleProgression() {
+    // Reset time to restart sparkle progression
+    this.timeOnPage = Math.max(3, this.timeOnPage * 0.3);
+  }
+
+  startSparkleGeneration() {
+    this.sparkleInterval = setInterval(() => {
+      if (!this.isScrolling && this.timeOnPage > 3) {
+        this.generateSparkle();
+      }
+    }, this.getSparkleGenerationRate());
+
+    // Update generation rate based on time
+    setInterval(() => {
+      if (this.sparkleInterval) {
+        clearInterval(this.sparkleInterval);
+        this.sparkleInterval = setInterval(() => {
+          if (!this.isScrolling && this.timeOnPage > 3) {
+            this.generateSparkle();
+          }
+        }, this.getSparkleGenerationRate());
+      }
+    }, 5000);
+  }
+
+  getSparkleGenerationRate() {
+    // More time on page = more frequent sparkles
+    if (this.timeOnPage < 10) return 2000;
+    if (this.timeOnPage < 20) return 1500;
+    if (this.timeOnPage < 40) return 1000;
+    if (this.timeOnPage < 60) return 800;
+    return 600; // Maximum sparkle rate
+  }
+
+  getSparkleIntensity() {
+    if (this.timeOnPage < 15) return 'level-1';
+    if (this.timeOnPage < 30) return 'level-2';
+    if (this.timeOnPage < 45) return 'level-3';
+    if (this.timeOnPage < 60) return 'level-4';
+    if (this.timeOnPage < 90) return 'level-5';
+    return 'level-6';
+  }
+
+  generateSparkle() {
+    const sparkle = document.createElement('div');
+    sparkle.className = `sparkle ${this.getSparkleIntensity()}`;
+
+    // Random chance for cyber sparkle
+    if (Math.random() < 0.3) {
+      sparkle.classList.add('cyber-sparkle');
+    }
+
+    // Random position
+    const x = Math.random() * window.innerWidth;
+    const y = Math.random() * window.innerHeight;
+
+    sparkle.style.left = x + 'px';
+    sparkle.style.top = y + 'px';
+
+    // Add to container
+    this.sparkleContainer.appendChild(sparkle);
+    this.sparkles.push(sparkle);
+
+    // Remove sparkle after animation
+    setTimeout(() => {
+      this.removeSparkle(sparkle);
+    }, 6000);
+
+    // Limit total sparkles
+    if (this.sparkles.length > 500) {
+      const oldSparkle = this.sparkles.shift();
+      this.removeSparkle(oldSparkle);
+    }
+  }
+
+  fadeSparklesOnScroll() {
+    this.sparkles.forEach((sparkle) => {
+      if (!sparkle.classList.contains('fade-out')) {
+        sparkle.classList.add('fade-out');
+        setTimeout(() => {
+          this.removeSparkle(sparkle);
+        }, 800);
+      }
+    });
+  }
+
+  removeSparkle(sparkle) {
+    if (sparkle && sparkle.parentNode) {
+      sparkle.parentNode.removeChild(sparkle);
+      const index = this.sparkles.indexOf(sparkle);
+      if (index > -1) {
+        this.sparkles.splice(index, 1);
+      }
+    }
+  }
+}
+
+// Initialize sparkle system when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  // Small delay to ensure page is fully loaded
+  setTimeout(() => {
+    new SparkleSystem();
+  }, 1000);
+});

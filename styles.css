@@ -124,7 +124,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(145,70,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
+  background: transparent;
   z-index: -1;
 }
 
@@ -224,18 +224,29 @@ body {
 
 .links-divider {
   text-align: center;
-  margin: 2rem 0 1.5rem 0;
   position: relative;
+  padding: 1rem 0;
 }
 
 .links-divider span {
-  background: var(--bg-primary);
-  color: var(--text-muted);
-  padding: 0 1rem;
-  font-size: 0.9rem;
-  font-weight: 500;
+  /* background: var(--bg-primary); */
+  color: var(--primary-color);
+  padding: 0.5rem 1.5rem;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.8rem;
+  font-weight: 200;
   position: relative;
   z-index: 1;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border: 1px solid var(--primary-color);
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+  box-shadow: 
+    0 0 5px var(--primary-color),
+    0 0 10px rgba(182, 255, 59, 0.3),
+    inset 0 1px 0 rgba(182, 255, 59, 0.2);
+  transition: var(--transition);
 }
 
 .links-divider::before {
@@ -244,9 +255,29 @@ body {
   top: 50%;
   left: 0;
   right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--text-muted), transparent);
-  opacity: 0.3;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--primary-color) 10%, 
+    var(--secondary-color) 30%, 
+    var(--primary-color) 90%, 
+    transparent 100%);
+  box-shadow: 
+    0 0 5px var(--primary-color),
+    0 0 10px rgba(182, 255, 59, 0.5);
+  opacity: 0.8;
+  animation: divider-pulse 3s ease-in-out infinite;
+}
+
+@keyframes divider-pulse {
+  0%, 100% { 
+    opacity: 0.8;
+    filter: brightness(1);
+  }
+  50% { 
+    opacity: 1;
+    filter: brightness(1.3);
+  }
 }
 
 /* Animated Header Divider */
@@ -256,14 +287,17 @@ body {
   margin: 0;
   overflow: hidden;
   background: linear-gradient(90deg, 
-    rgba(182, 255, 59, 0.15) 0%, 
-    rgba(42, 59, 104, 0.15) 15%,
-    rgba(0, 35, 102, 0.12) 30%,
-    rgba(0, 255, 255, 0.15) 45%,
-    rgba(15, 26, 56, 0.15) 60%,
-    rgba(0, 35, 102, 0.10) 75%,
-    rgba(182, 255, 59, 0.08) 90%,
-    rgba(0, 255, 255, 0.15) 100%);
+    var(--black-void) 0%, 
+    rgba(182, 255, 59, 0.08) 10%,
+    var(--black-soft) 20%,
+    rgba(0, 255, 255, 0.06) 30%,
+    var(--black-deep) 40%,
+    rgba(182, 255, 59, 0.05) 50%,
+    var(--black-rich) 60%,
+    rgba(0, 255, 255, 0.08) 70%,
+    var(--black-carbon) 80%,
+    rgba(182, 255, 59, 0.06) 90%,
+    var(--black-pure) 100%);
   border-bottom: 2px solid rgba(182, 255, 59, 0.4);
 }
 
@@ -317,13 +351,13 @@ body {
 .gaming-icon-float:nth-child(9) { left: 5%; }
 
 .animated-header .gaming-icon-float.gaming-icon-special {
-  color: var(--accent-dark-purple);
-  text-shadow: 0 0 10px rgba(52, 1, 140, 0.8);
+  color: var(--accent-charcoal);
+  text-shadow: 0 0 10px var(--black-shadow), 0 0 15px rgba(54, 69, 79, 0.8);
 }
 
 .animated-header .gaming-icon-float:nth-child(5n) {
-  color: var(--accent-navy);
-  text-shadow: 0 0 12px rgba(0, 35, 102, 0.9);
+  color: var(--accent-obsidian);
+  text-shadow: 0 0 12px var(--black-overlay), 0 0 18px rgba(15, 15, 35, 0.9);
 }
 
 .animated-header .gaming-icon-float:nth-child(odd) {
@@ -335,11 +369,17 @@ body {
 }
 
 .animated-header .gaming-icon-float:nth-child(3n) {
-  color: var(--accent-violet);
+  color: var(--accent-jet);
+  text-shadow: 0 0 8px var(--black-shadow), 0 0 12px rgba(52, 52, 52, 0.7);
 }
 
 .animated-header .gaming-icon-float:nth-child(4n) {
   color: var(--secondary-color);
+}
+
+.animated-header .gaming-icon-float:nth-child(7n) {
+  color: var(--accent-raven);
+  text-shadow: 0 0 6px var(--black-overlay), 0 0 10px rgba(28, 28, 28, 0.8);
 }
 
 .gaming-icon-float:nth-child(odd) {
@@ -391,6 +431,7 @@ body {
   right: 0;
   height: 30px;
   overflow: hidden;
+  border-bottom: 3px solid black;
 }
 
 .wave-container {
@@ -561,8 +602,48 @@ body {
 /* About Streamers Section */
 .about {
   padding: 2rem 2rem;
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
   border-bottom: 1px solid rgba(0, 245, 255, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.about::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    var(--primary-color) 20%, 
+    var(--secondary-color) 50%, 
+    var(--primary-color) 80%, 
+    transparent 100%);
+  box-shadow: 
+    0 0 10px var(--primary-color),
+    0 0 20px var(--primary-color),
+    0 0 30px rgba(182, 255, 59, 0.5);
+  z-index: 1;
+  animation: scanning-line-vertical 10s ease-in-out infinite;
+}
+
+@keyframes scanning-line-vertical {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
 }
 
 .about-container {
@@ -929,4 +1010,178 @@ footer p {
   .about {
     padding: 3rem 1rem;
   }
+}
+
+/* Sparkle Effect System */
+.sparkle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  animation: sparkle-twinkle 2s ease-in-out infinite;
+}
+
+.sparkle.cyber-sparkle {
+  background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+  box-shadow: 0 0 6px var(--secondary-color);
+}
+
+.sparkle.fade-out {
+  animation: sparkle-fade-out 0.8s ease-out forwards;
+}
+
+@keyframes sparkle-twinkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+@keyframes sparkle-fade-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+/* Sparkle intensity levels */
+.sparkle.level-1 {
+  animation-duration: 3s;
+  width: 3px;
+  height: 3px;
+}
+
+.sparkle.level-2 {
+  animation-duration: 2.5s;
+  width: 5px;
+  height: 5px;
+  box-shadow: 0 0 4px currentColor;
+}
+
+.sparkle.level-3 {
+  animation-duration: 2s;
+  width: 6px;
+  height: 6px;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.sparkle.level-4 {
+  animation-duration: 1.8s;
+  width: 8px;
+  height: 8px;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.sparkle.level-5 {
+  animation-duration: 1.5s;
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 15px currentColor, 0 0 25px currentColor;
+}
+
+.sparkle.level-6 {
+  animation-duration: 1.2s;
+  width: 12px;
+  height: 12px;
+  box-shadow: 
+    0 0 15px currentColor, 
+    0 0 30px currentColor,
+    0 0 45px rgba(182, 255, 59, 0.5);
+}
+
+/* Sparkle Effect System */
+.sparkle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.sparkle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  animation: sparkle-twinkle 2s ease-in-out infinite;
+}
+
+.sparkle.cyber-sparkle {
+  background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+  box-shadow: 0 0 6px var(--secondary-color);
+}
+
+.sparkle.fade-out {
+  animation: sparkle-fade-out 0.8s ease-out forwards;
+}
+
+@keyframes sparkle-twinkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+@keyframes sparkle-fade-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+/* Sparkle intensity levels */
+.sparkle.level-1 {
+  animation-duration: 3s;
+  width: 3px;
+  height: 3px;
+}
+
+.sparkle.level-2 {
+  animation-duration: 2.5s;
+  width: 5px;
+  height: 5px;
+  box-shadow: 0 0 4px currentColor;
+}
+
+.sparkle.level-3 {
+  animation-duration: 2s;
+  width: 6px;
+  height: 6px;
+  box-shadow: 0 0 8px currentColor;
 }
