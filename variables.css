@@ -13,8 +13,20 @@
   /* Background Colors - Darker Night Blue */
   --bg-primary: #0F1A38; /* Darker Night Blue */
   --bg-secondary: #1A2548; /* Slightly Lighter Dark Blue */
-  --bg-tertiary: #2A3B68; /* Darker Steel Blue for Cards */
+  --bg-tertiary: #000; /* Pure Black for Cards */
   --bg-gradient: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  
+  /* Black Color Variations */
+  --black-pure: #000000; /* Pure Black */
+  --black-soft: #0a0a0a; /* Soft Black */
+  --black-rich: #111111; /* Rich Black */
+  --black-deep: #1a1a1a; /* Deep Black */
+  --black-void: #050505; /* Void Black */
+  --black-matte: #0d0d0d; /* Matte Black */
+  --black-carbon: #141414; /* Carbon Black */
+  --black-shadow: rgba(0, 0, 0, 0.9); /* Transparent Black */
+  --black-overlay: rgba(0, 0, 0, 0.7); /* Black Overlay */
+  --black-subtle: rgba(0, 0, 0, 0.4); /* Subtle Black */
   
   /* Text Colors - Cloud Dancer */
   --text-primary: #F0EEE9; /* Cloud Dancer */
@@ -39,6 +51,20 @@
   --accent-violet: #2A3B68; /* Darker Steel Blue */
   --accent-navy: #002366; /* Navy Blue */
   --accent-dark-purple: #34018c; /* Dark Purple */
+  
+  /* Dark Accent Colors */
+  --accent-charcoal: #36454f; /* Charcoal */
+  --accent-obsidian: #0f0f23; /* Obsidian */
+  --accent-midnight: #2c3e50; /* Midnight Blue */
+  --accent-onyx: #353839; /* Onyx */
+  --accent-jet: #343434; /* Jet Black */
+  --accent-raven: #1c1c1c; /* Raven Black */
+  
+  /* Black-based Gradients */
+  --gradient-black-neon: linear-gradient(135deg, var(--black-pure) 0%, var(--primary-color) 100%);
+  --gradient-void-cyan: linear-gradient(135deg, var(--black-void) 0%, var(--secondary-color) 100%);
+  --gradient-dark-fade: linear-gradient(180deg, var(--black-pure) 0%, transparent 100%);
+  --gradient-shadow-rise: linear-gradient(0deg, var(--black-shadow) 0%, transparent 100%);
   
   /* Social Media Colors */
   --twitch: #9146ff;
