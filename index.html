@@ -260,36 +260,91 @@
             <h2 class="section-title">🎮 Squad Game Picker</h2>
             <p class="game-picker-subtitle">Find games we all own and pick what to play next!</p>
             
-            <!-- Password Protection -->
-            <div id="password-screen" class="password-screen">
-                <div class="password-form">
-                    <i class="fas fa-lock password-icon"></i>
-                    <h3>Squad Members Only</h3>
-                    <p>Enter the squad password to access the game picker</p>
-                    <input type="password" id="access-password" placeholder="Enter password">
-                    <button id="unlock-btn" class="unlock-btn">
-                        <i class="fas fa-unlock-alt"></i> Unlock Game Picker
-                    </button>
-                    <div id="password-error" class="password-error"></div>
+            <!-- Password Modal -->
+            <div id="password-modal" class="password-modal" style="display: none;">
+                <div class="password-modal-content">
+                    <div class="password-modal-header">
+                        <h3>🔐 Enter Squad Password</h3>
+                        <button id="close-modal" class="close-modal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <p>Access our private Steam libraries</p>
+                    <div class="password-input-group">
+                        <input type="password" id="squad-password" placeholder="Enter password...">
+                        <button id="unlock-squad" class="btn btn-primary">
+                            <i class="fas fa-unlock"></i> Unlock
+                        </button>
+                    </div>
+                    <div id="password-error" class="password-error" style="display: none;"></div>
                 </div>
             </div>
             
-            <!-- Game Picker Interface (Hidden Initially) -->
-            <div id="game-picker-interface" class="game-picker-interface" style="display: none;">
+            <!-- Customize Players Modal -->
+            <div id="customize-players-modal" class="password-modal" style="display: none;">
+                <div class="password-modal-content customize-modal">
+                    <div class="password-modal-header">
+                        <h3>🎮 Customize Player Group</h3>
+                        <button id="close-customize-modal" class="close-modal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <p>Enter Steam IDs for 2-6 players to find common games. <strong>At least 2 players are required.</strong></p>
+                    <div class="player-inputs-container">
+                        <div class="player-input-row required">
+                            <label>Player 1: <span class="required-indicator">*</span></label>
+                            <input type="text" id="player-name-0" placeholder="Player Name" class="player-name-input">
+                            <input type="text" id="player-id-0" placeholder="Steam ID or Profile URL" class="player-id-input" required>
+                        </div>
+                        <div class="player-input-row required">
+                            <label>Player 2: <span class="required-indicator">*</span></label>
+                            <input type="text" id="player-name-1" placeholder="Player Name" class="player-name-input">
+                            <input type="text" id="player-id-1" placeholder="Steam ID or Profile URL" class="player-id-input" required>
+                        </div>
+                        <div class="player-input-row">
+                            <label>Player 3:</label>
+                            <input type="text" id="player-name-2" placeholder="Player Name" class="player-name-input">
+                            <input type="text" id="player-id-2" placeholder="Steam ID or Profile URL" class="player-id-input">
+                        </div>
+                        <div class="player-input-row">
+                            <label>Player 4:</label>
+                            <input type="text" id="player-name-3" placeholder="Player Name" class="player-name-input">
+                            <input type="text" id="player-id-3" placeholder="Steam ID or Profile URL" class="player-id-input">
+                        </div>
+                        <div class="player-input-row">
+                            <label>Player 5:</label>
+                            <input type="text" id="player-name-4" placeholder="Player Name" class="player-name-input">
+                            <input type="text" id="player-id-4" placeholder="Steam ID or Profile URL" class="player-id-input">
+                        </div>
+                        <div class="player-input-row">
+                            <label>Player 6:</label>
+                            <input type="text" id="player-name-5" placeholder="Player Name" class="player-name-input">
+                            <input type="text" id="player-id-5" placeholder="Steam ID or Profile URL" class="player-id-input">
+                        </div>
+                    </div>
+                    <div class="customize-modal-actions">
+                        <button id="reset-to-defaults" class="btn btn-secondary">
+                            <i class="fas fa-undo"></i> Use Default Squad
+                        </button>
+                        <button id="fetch-custom-libraries" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Get Game Libraries
+                        </button>
+                    </div>
+                    <div id="customize-error" class="password-error" style="display: none;"></div>
+                </div>
+            </div>
+            
+            <!-- Game Picker Interface -->
+            <div id="game-picker-interface" class="game-picker-interface">
                 <!-- Loading State -->
                 <div id="loading-screen" class="loading-screen">
                     <div class="loading-spinner"></div>
-                    <p>Fetching squad game libraries...</p>
-                    <div class="loading-progress">
-                        <div class="progress-bar">
-                            <div id="progress-fill" class="progress-fill"></div>
-                        </div>
-                        <span id="progress-text">0/4 players loaded</span>
-                    </div>
                 </div>
                 
                 <!-- Game Results -->
                 <div id="game-results" class="game-results" style="display: none;">
+                    <div id="data-mode-indicator" class="data-mode-indicator"></div>
+                    
                     <div class="game-stats">
                         <div class="stat-card">
                             <i class="fas fa-users"></i>

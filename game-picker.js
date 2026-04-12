@@ -21,23 +21,81 @@ class GamePicker {
     this.picksCount = 0;
     this.isAuthenticated = false;
     this.viewMode = 'grid'; // 'grid' or 'list'
+    this.usingMockData = true; // Track if we're using mock data
+    this.customPlayerIds = null; // Store custom player IDs
+    this.customPlayerNames = null; // Store custom player names
 
     this.initializeEventListeners();
 
     // Hide the clear omits button initially
     this.updateClearOmitsVisibility();
+
+    // Always show the game picker and load mock data
+    this.showGamePicker();
+    this.loadMockData();
+  }
+
+  handleRefreshLibraries() {
+    if (!this.isAuthenticated) {
+      this.showError(
+        'Please enter the password first to access real Steam libraries.',
+      );
+      return;
+    }
+    this.loadGameLibraries();
+  }
+
+  handleRetryAction() {
+    if (!this.isAuthenticated) {
+      // Reset UI to show mock data instead of error
+      this.resetToMockData();
+      return;
+    }
+    this.loadGameLibraries();
+  }
+
+  resetToMockData() {
+    // Hide error screen and show mock data
+    document.getElementById('error-screen').style.display = 'none';
+    this.usingMockData = true;
+    this.loadMockData();
   }
 
   initializeEventListeners() {
-    // Password authentication
+    // Modal close events
     document
-      .getElementById('unlock-btn')
-      ?.addEventListener('click', () => this.checkPassword());
+      .getElementById('close-modal')
+      ?.addEventListener('click', () => this.hidePasswordModal());
     document
-      .getElementById('access-password')
+      .getElementById('password-modal')
+      ?.addEventListener('click', (e) => {
+        if (e.target.id === 'password-modal') this.hidePasswordModal();
+      });
+    document
+      .getElementById('squad-password')
       ?.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') this.checkPassword();
       });
+    document
+      .getElementById('unlock-squad')
+      ?.addEventListener('click', () => this.checkPassword());
+
+    // Customize players modal events
+    document
+      .getElementById('close-customize-modal')
+      ?.addEventListener('click', () => this.hideCustomizeModal());
+    document
+      .getElementById('customize-players-modal')
+      ?.addEventListener('click', (e) => {
+        if (e.target.id === 'customize-players-modal')
+          this.hideCustomizeModal();
+      });
+    document
+      .getElementById('reset-to-defaults')
+      ?.addEventListener('click', () => this.resetToDefaultPlayers());
+    document
+      .getElementById('fetch-custom-libraries')
+      ?.addEventListener('click', () => this.fetchCustomLibraries());
 
     // Game picker actions
     document
@@ -48,10 +106,10 @@ class GamePicker {
       ?.addEventListener('click', () => this.toggleAllGames());
     document
       .getElementById('refresh-btn')
-      ?.addEventListener('click', () => this.loadGameLibraries());
+      ?.addEventListener('click', () => this.handleRefreshLibraries());
     document
       .getElementById('retry-btn')
-      ?.addEventListener('click', () => this.loadGameLibraries());
+      ?.addEventListener('click', () => this.handleRetryAction());
     document
       .getElementById('steam-link-btn')
       ?.addEventListener('click', () => this.openSteamPage());
@@ -76,7 +134,7 @@ class GamePicker {
   }
 
   async checkPassword() {
-    const passwordInput = document.getElementById('access-password');
+    const passwordInput = document.getElementById('squad-password');
     const errorDiv = document.getElementById('password-error');
     const enteredPassword = passwordInput.value.trim();
 
@@ -87,26 +145,280 @@ class GamePicker {
 
     if (enteredPassword === this.accessPassword) {
       this.isAuthenticated = true;
-      this.showGamePicker();
-      this.loadGameLibraries();
+      this.usingMockData = false;
+      this.hidePasswordModal();
+      this.loadGameLibraries(); // Load real data
     } else {
       this.showPasswordError('Incorrect password. Squad members only!');
       passwordInput.value = '';
     }
   }
 
-  showPasswordError(message) {
+  showPasswordModal() {
+    const passwordModal = document.getElementById('password-modal');
+    if (passwordModal) {
+      passwordModal.style.display = 'flex';
+      // Focus on password input
+      const passwordInput = document.getElementById('squad-password');
+      if (passwordInput) {
+        setTimeout(() => passwordInput.focus(), 100);
+      }
+    }
+  }
+
+  hidePasswordModal() {
+    const passwordModal = document.getElementById('password-modal');
+    if (passwordModal) {
+      passwordModal.style.display = 'none';
+    }
+    // Clear any error messages
     const errorDiv = document.getElementById('password-error');
-    errorDiv.textContent = message;
-    errorDiv.style.display = 'block';
-    setTimeout(() => {
+    if (errorDiv) {
       errorDiv.style.display = 'none';
-    }, 3000);
+    }
+  }
+
+  showCustomizeError(message) {
+    const errorDiv = document.getElementById('customize-error');
+    if (errorDiv) {
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+    }
+  }
+
+  showCustomizeModal() {
+    const modal = document.getElementById('customize-players-modal');
+    if (modal) {
+      // Pre-fill with current player IDs and names if using custom ones
+      if (this.customPlayerIds) {
+        this.customPlayerIds.forEach((id, index) => {
+          const idInput = document.getElementById(`player-id-${index}`);
+          const nameInput = document.getElementById(`player-name-${index}`);
+          if (idInput) idInput.value = id;
+          if (
+            nameInput &&
+            this.customPlayerNames &&
+            this.customPlayerNames[index]
+          ) {
+            nameInput.value = this.customPlayerNames[index];
+          }
+        });
+      } else if (window.GAME_PICKER_CONFIG?.steamIds) {
+        // Pre-fill with default IDs
+        window.GAME_PICKER_CONFIG.steamIds.forEach((id, index) => {
+          const idInput = document.getElementById(`player-id-${index}`);
+          const nameInput = document.getElementById(`player-name-${index}`);
+          if (idInput) idInput.value = id;
+          if (nameInput) {
+            // Use configured name if available, otherwise default
+            const configuredName = Object.keys(
+              window.GAME_PICKER_CONFIG.PLAYER_NAMES || {},
+            ).find((key) => window.GAME_PICKER_CONFIG.PLAYER_NAMES[key] === id);
+            nameInput.value = configuredName || `Player ${index + 1}`;
+          }
+        });
+      }
+
+      modal.style.display = 'flex';
+    }
+  }
+
+  hideCustomizeModal() {
+    const modal = document.getElementById('customize-players-modal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+    // Clear any error messages
+    const errorDiv = document.getElementById('customize-error');
+    if (errorDiv) {
+      errorDiv.style.display = 'none';
+    }
+  }
+
+  async resetToDefaultPlayers() {
+    this.customPlayerIds = null;
+    this.customPlayerNames = null;
+    this.hideCustomizeModal();
+    // Reload with default player IDs
+    await this.loadGameLibraries();
+  }
+
+  async fetchCustomLibraries() {
+    const playerIds = [];
+    const playerNames = [];
+
+    // Collect entered player IDs and names
+    for (let i = 0; i < 6; i++) {
+      const idInput = document.getElementById(`player-id-${i}`);
+      const nameInput = document.getElementById(`player-name-${i}`);
+
+      if (idInput && idInput.value.trim()) {
+        let playerId = idInput.value.trim();
+        let playerName =
+          nameInput && nameInput.value.trim()
+            ? nameInput.value.trim()
+            : `Player ${i + 1}`;
+
+        // Extract Steam ID from profile URL if needed
+        if (playerId.includes('steamcommunity.com')) {
+          const match = playerId.match(/\/(id|profiles)\/([^\/]+)/);
+          if (match) {
+            playerId = match[2];
+          }
+        }
+
+        playerIds.push(playerId);
+        playerNames.push(playerName);
+      }
+    }
+
+    if (playerIds.length < 2) {
+      this.showCustomizeError(
+        'Please enter at least 2 player IDs to find common games.',
+      );
+      return;
+    }
+
+    this.customPlayerIds = playerIds;
+    this.customPlayerNames = playerNames;
+    this.hideCustomizeModal();
+
+    // Load libraries with custom player IDs
+    await this.loadGameLibraries();
+  }
+
+  loadMockData() {
+    // Mock player data with realistic Steam-style info
+    this.playerGamesData = [
+      {
+        steamId: 'mock_1',
+        playerName: 'Alex',
+        games: this.getMockGames(),
+      },
+      {
+        steamId: 'mock_2',
+        playerName: 'Jordan',
+        games: this.getMockGames(),
+      },
+      {
+        steamId: 'mock_3',
+        playerName: 'Casey',
+        games: this.getMockGames(),
+      },
+      {
+        steamId: 'mock_4',
+        playerName: 'Sam',
+        games: this.getMockGames(),
+      },
+    ];
+
+    // Create mock common games (games all players have)
+    this.commonGames = [
+      { appid: 730, name: 'Counter-Strike 2', playtime_forever: 8400 },
+      { appid: 440, name: 'Team Fortress 2', playtime_forever: 3200 },
+      { appid: 570, name: 'Dota 2', playtime_forever: 12600 },
+      { appid: 4000, name: "Garry's Mod", playtime_forever: 5400 },
+      { appid: 10, name: 'Counter-Strike', playtime_forever: 1800 },
+      { appid: 413150, name: 'Stardew Valley', playtime_forever: 4800 },
+      { appid: 252490, name: 'Rust', playtime_forever: 7200 },
+      { appid: 271590, name: 'Grand Theft Auto V', playtime_forever: 9000 },
+      { appid: 70, name: 'Half-Life', playtime_forever: 600 },
+      { appid: 220, name: 'Half-Life 2', playtime_forever: 1200 },
+      { appid: 304930, name: 'Unturned', playtime_forever: 2400 },
+      { appid: 105600, name: 'Terraria', playtime_forever: 6000 },
+      {
+        appid: 292030,
+        name: 'The Witcher 3: Wild Hunt',
+        playtime_forever: 3600,
+      },
+      { appid: 431960, name: 'Wallpaper Engine', playtime_forever: 0 },
+      {
+        appid: 359550,
+        name: "Tom Clancy's Rainbow Six Siege",
+        playtime_forever: 4800,
+      },
+    ];
+
+    // Categorize mock games
+    this.categorizeMockGames();
+
+    setTimeout(() => {
+      this.showResults();
+    }, 500);
+  }
+
+  getMockGames() {
+    // Generate slightly different playtimes for each player to make it realistic
+    const baseGames = [
+      { appid: 730, name: 'Counter-Strike 2' },
+      { appid: 440, name: 'Team Fortress 2' },
+      { appid: 570, name: 'Dota 2' },
+      { appid: 4000, name: "Garry's Mod" },
+      { appid: 10, name: 'Counter-Strike' },
+      { appid: 413150, name: 'Stardew Valley' },
+      { appid: 252490, name: 'Rust' },
+      { appid: 271590, name: 'Grand Theft Auto V' },
+      { appid: 70, name: 'Half-Life' },
+      { appid: 220, name: 'Half-Life 2' },
+      { appid: 304930, name: 'Unturned' },
+      { appid: 105600, name: 'Terraria' },
+      { appid: 292030, name: 'The Witcher 3: Wild Hunt' },
+      { appid: 431960, name: 'Wallpaper Engine' },
+      { appid: 359550, name: "Tom Clancy's Rainbow Six Siege" },
+    ];
+
+    return baseGames.map((game) => ({
+      ...game,
+      playtime_forever: Math.floor(Math.random() * 10000) + 600, // Random hours between 10-176 hours
+    }));
+  }
+
+  categorizeMockGames() {
+    // Manually categorize mock games since we know them
+    const multiplayerAppIds = [
+      730, 440, 570, 4000, 252490, 271590, 304930, 105600, 359550, 10,
+    ];
+    const singleplayerAppIds = [413150, 70, 220, 292030, 431960];
+
+    this.multiplayerGames = this.commonGames.filter((game) =>
+      multiplayerAppIds.includes(game.appid),
+    );
+
+    this.singleplayerGames = this.commonGames.filter((game) =>
+      singleplayerAppIds.includes(game.appid),
+    );
+
+    console.log('🎮 Mock Data Loaded:');
+    console.log(`🔥 ${this.multiplayerGames.length} multiplayer games`);
+    console.log(`🎲 ${this.singleplayerGames.length} singleplayer games`);
   }
 
   showGamePicker() {
-    document.getElementById('password-screen').style.display = 'none';
-    document.getElementById('game-picker-interface').style.display = 'block';
+    const passwordScreen = document.getElementById('password-screen');
+    const gamePickerInterface = document.getElementById(
+      'game-picker-interface',
+    );
+
+    if (passwordScreen && gamePickerInterface) {
+      // Always show the interface, but show password screen overlay if using mock data
+      gamePickerInterface.style.display = 'block';
+
+      if (this.usingMockData && !this.isAuthenticated) {
+        // Show password screen as an overlay
+        passwordScreen.style.display = 'flex';
+        passwordScreen.style.position = 'fixed';
+        passwordScreen.style.top = '0';
+        passwordScreen.style.left = '0';
+        passwordScreen.style.right = '0';
+        passwordScreen.style.bottom = '0';
+        passwordScreen.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        passwordScreen.style.zIndex = '1000';
+        passwordScreen.style.justifyContent = 'center';
+        passwordScreen.style.alignItems = 'center';
+      } else {
+        passwordScreen.style.display = 'none';
+      }
+    }
   }
 
   async loadGameLibraries() {
@@ -118,13 +430,28 @@ class GamePicker {
     this.showLoading();
 
     try {
+      // Use custom player IDs if available, otherwise use default config
+      const steamIds = this.customPlayerIds || this.steamIds;
+
+      if (!steamIds || steamIds.length === 0) {
+        this.showError('No Steam IDs configured. Please enter player IDs.');
+        return;
+      }
+
       this.playerGamesData = []; // Reset player data
       let failedFetches = 0;
 
       // Fetch games for each Steam ID
-      for (let i = 0; i < this.steamIds.length; i++) {
-        const steamId = this.steamIds[i];
-        const playerName = this.playerNames[steamId] || `Player ${i + 1}`;
+      for (let i = 0; i < steamIds.length; i++) {
+        const steamId = steamIds[i];
+        let playerName;
+
+        if (this.customPlayerNames && this.customPlayerNames[i]) {
+          playerName = this.customPlayerNames[i];
+        } else {
+          playerName = this.playerNames[steamId] || `Player ${i + 1}`;
+        }
+
         this.updateProgress(i, `Loading ${playerName}...`);
 
         const games = await this.fetchPlayerGames(steamId);
@@ -142,7 +469,7 @@ class GamePicker {
       }
 
       // Check if we have enough data to find common games
-      if (failedFetches >= this.steamIds.length) {
+      if (failedFetches >= steamIds.length) {
         throw new Error(
           'Failed to load any game libraries. Please check your Steam API key and make sure Steam profiles are public.',
         );
@@ -496,16 +823,7 @@ class GamePicker {
   }
 
   updateProgress(completed, message) {
-    const progressFill = document.getElementById('progress-fill');
-    const progressText = document.getElementById('progress-text');
-
-    const percentage = (completed / this.steamIds.length) * 100;
-    progressFill.style.width = `${percentage}%`;
-    progressText.textContent = `${completed}/${this.steamIds.length} players loaded`;
-
-    if (message) {
-      document.querySelector('.loading-screen p').textContent = message;
-    }
+    // Progress is now just visual spinner - no text updates needed
   }
 
   showResults() {
@@ -527,9 +845,19 @@ class GamePicker {
     if (gameResults) gameResults.style.display = 'block';
 
     // Update stats
+    const playersCount = document.getElementById('players-count');
     if (commonGamesCount)
       commonGamesCount.textContent = this.commonGames.length;
     if (picksCount) picksCount.textContent = this.picksCount;
+    if (playersCount) {
+      const currentPlayerCount = this.customPlayerIds
+        ? this.customPlayerIds.length
+        : this.steamIds.length;
+      playersCount.textContent = currentPlayerCount;
+    }
+
+    // Add mock data indicator
+    this.updateDataModeIndicator();
 
     // Show action buttons and filter tabs
     if (this.commonGames.length > 0) {
@@ -757,7 +1085,6 @@ class GamePicker {
       hoursHTML += '</div>';
 
       gameCard.innerHTML = `
-                ${multiplayerBadge}
                 <div class="game-image-container">
                     <img src="${imageUrl}" alt="${game.name}" loading="lazy" 
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
@@ -772,7 +1099,8 @@ class GamePicker {
                 <div class="game-info">
                     ${hoursHTML}
                 </div>
-                <div class="card-actions">
+                <div class="card-badge-actions">
+                    ${multiplayerBadge}
                     <button class="omit-btn" title="${this.omittedGames.has(game.appid) ? 'Include in random' : 'Exclude from random'}">
                         <i class="fas ${this.omittedGames.has(game.appid) ? 'fa-eye' : 'fa-eye-slash'}"></i>
                     </button>
@@ -845,17 +1173,6 @@ class GamePicker {
     });
     document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
 
-    // Update show all button text
-    const showBtn = document.getElementById('show-all-btn');
-    if (filter === 'multiplayer') {
-      showBtn.innerHTML = '<i class="fas fa-list"></i> Show Multiplayer Games';
-    } else if (filter === 'singleplayer') {
-      showBtn.innerHTML =
-        '<i class="fas fa-list"></i> Show Single Player Games';
-    } else {
-      showBtn.innerHTML = '<i class="fas fa-list"></i> Show All Games';
-    }
-
     // If games list is currently shown, refresh it
     const gamesList = document.getElementById('all-games-list');
     if (gamesList.style.display !== 'none') {
@@ -917,9 +1234,34 @@ class GamePicker {
       return this.commonGames;
     }
   }
+
+  updateDataModeIndicator() {
+    const indicator = document.getElementById('data-mode-indicator');
+    if (!indicator) return;
+
+    if (this.usingMockData) {
+      indicator.innerHTML = `
+        <span>🎭 Using demo data</span>
+        <button class="unlock-button" onclick="window.gamePicker.showPasswordModal()">
+          <i class="fas fa-lock"></i>
+          <span>Enter Password for Real Data</span>
+        </button>
+      `;
+      indicator.className = 'data-mode-indicator mock';
+    } else {
+      indicator.innerHTML = `
+        <span>🎮 Showing real Steam libraries</span>
+        <button class="unlock-button" onclick="window.gamePicker.showCustomizeModal()">
+          <i class="fas fa-users-cog"></i>
+          <span>Customize Player Group</span>
+        </button>
+      `;
+      indicator.className = 'data-mode-indicator real';
+    }
+  }
 }
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  new GamePicker();
+  window.gamePicker = new GamePicker();
 });
