@@ -178,6 +178,14 @@ class GamePicker {
     }
   }
 
+  showPasswordError(message) {
+    const errorDiv = document.getElementById('password-error');
+    if (errorDiv) {
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+    }
+  }
+
   showCustomizeError(message) {
     const errorDiv = document.getElementById('customize-error');
     if (errorDiv) {
