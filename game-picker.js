@@ -561,8 +561,8 @@ class GamePicker {
 
     // List of CORS proxies to try (in order of reliability for production)
     const proxies = [
-      `http://localhost:3000/api/proxy?url=${encodeURIComponent(url)}`, // Local development
-      // `https://steam-cors-proxy-beta.vercel.app/api/proxy?url=${encodeURIComponent(url)}`,
+      `https://steam-cors-proxy-beta.vercel.app/api/proxy?url=${encodeURIComponent(url)}`,
+      `http://localhost:3000/api/proxy?url=${encodeURIComponent(url)}`, // Local development fallback
     ];
 
     for (let i = 0; i < proxies.length; i++) {
@@ -571,13 +571,18 @@ class GamePicker {
           `Trying proxy ${i + 1}/${proxies.length} for ${steamId.slice(-4)}...`,
         );
 
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+
         const response = await fetch(proxies[i], {
           method: 'GET',
           headers: {
             Accept: 'application/json',
           },
-          signal: AbortSignal.timeout(15000), // Increased timeout for production
+          signal: controller.signal,
         });
+
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
