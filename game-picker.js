@@ -535,11 +535,8 @@ class GamePicker {
 
     // List of CORS proxies to try (in order of reliability for production)
     const proxies = [
-      `https://corsproxy.io/?${encodeURIComponent(url)}`,
-      `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
-      `https://thingproxy.freeboard.io/fetch/${url}`,
-      // Note: cors-anywhere.herokuapp.com requires demo page visit, using as last resort
-      `https://cors-anywhere.herokuapp.com/${url}`,
+      // `http://localhost:3000/api/proxy?url=${encodeURIComponent(url)}`, // Local development
+      `https://steam-cors-proxy-beta.vercel.app/api/proxy?url=${encodeURIComponent(url)}`,
     ];
 
     for (let i = 0; i < proxies.length; i++) {
@@ -744,7 +741,8 @@ class GamePicker {
 
     // Use same proxy approach as before
     const proxies = [
-      `https://corsproxy.io/?${encodeURIComponent(url)}`,
+      `http://localhost:3000/api/proxy?url=${encodeURIComponent(url)}`, // Local development
+      `https://steam-cors-proxy-beta.vercel.app/api/proxy?url=${encodeURIComponent(url)}`,
       `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
       `https://thingproxy.freeboard.io/fetch/${url}`,
     ];
