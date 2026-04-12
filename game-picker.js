@@ -143,14 +143,44 @@ class GamePicker {
       return;
     }
 
-    if (enteredPassword === this.accessPassword) {
-      this.isAuthenticated = true;
-      this.usingMockData = false;
-      this.hidePasswordModal();
-      this.loadGameLibraries(); // Load real data
-    } else {
-      this.showPasswordError('Incorrect password. Squad members only!');
-      passwordInput.value = '';
+    try {
+      // Try localhost first (if running locally), then production
+      const authUrls = [
+        `http://localhost:3000/api/authenticate?password=${encodeURIComponent(enteredPassword)}`,
+        `https://steam-cors-proxy-beta.vercel.app/api/authenticate?password=${encodeURIComponent(enteredPassword)}`,
+      ];
+
+      let result = null;
+      for (const authUrl of authUrls) {
+        try {
+          const response = await fetch(authUrl);
+          if (response.ok) {
+            result = await response.json();
+            break;
+          }
+        } catch (e) {
+          continue; // Try next URL
+        }
+      }
+
+      if (!result) {
+        throw new Error('Authentication service unavailable');
+      }
+
+      if (result.valid) {
+        this.isAuthenticated = true;
+        this.usingMockData = false;
+        this.hidePasswordModal();
+        this.loadGameLibraries(); // Load real data
+      } else {
+        this.showPasswordError('Incorrect password. Squad members only!');
+        passwordInput.value = '';
+      }
+    } catch (error) {
+      console.error('Authentication error:', error);
+      this.showPasswordError(
+        'Authentication service unavailable. Please try again.',
+      );
     }
   }
 
@@ -430,11 +460,6 @@ class GamePicker {
   }
 
   async loadGameLibraries() {
-    if (!this.apiKey) {
-      this.showError('Steam API key not configured');
-      return;
-    }
-
     this.showLoading();
 
     try {
@@ -531,12 +556,13 @@ class GamePicker {
   }
 
   async fetchPlayerGames(steamId) {
-    const url = `https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${this.apiKey}&steamid=${steamId}&format=json&include_appinfo=true`;
+    // Remove API key from URL - proxy will inject it server-side
+    const url = `https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?steamid=${steamId}&format=json&include_appinfo=true`;
 
     // List of CORS proxies to try (in order of reliability for production)
     const proxies = [
-      // `http://localhost:3000/api/proxy?url=${encodeURIComponent(url)}`, // Local development
-      `https://steam-cors-proxy-beta.vercel.app/api/proxy?url=${encodeURIComponent(url)}`,
+      `http://localhost:3000/api/proxy?url=${encodeURIComponent(url)}`, // Local development
+      // `https://steam-cors-proxy-beta.vercel.app/api/proxy?url=${encodeURIComponent(url)}`,
     ];
 
     for (let i = 0; i < proxies.length; i++) {
