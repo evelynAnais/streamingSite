@@ -37,6 +37,7 @@
         <div class="mobile-nav-links" id="mobileNavLinks">
             <a href="#home">Home</a>
             <a href="#about">Meet the Team</a>
+            <a href="#game-picker">Game Picker</a>
             <a href="#contact">Contact</a>
         </div>
     </nav>
@@ -54,7 +55,7 @@
         </div>
         
         <!-- Floating Gaming Icons -->
-        <div class="floating-icons">
+        <!-- <div class="floating-icons">
             <div class="gaming-icon-float" style="--delay: 0s; --duration: 3s;">
                 <i class="fas fa-gamepad"></i>
             </div>
@@ -79,7 +80,7 @@
             <div class="gaming-icon-float" style="--delay: 1.2s; --duration: 3.3s;">
                 <i class="fas fa-bolt"></i>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- Hero + Links Combined Section -->
@@ -253,6 +254,137 @@
         </div>
     </section>
 
+    <!-- Game Picker Section -->
+    <section id="game-picker" class="game-picker-section">
+        <div class="game-picker-container">
+            <h2 class="section-title">🎮 Squad Game Picker</h2>
+            <p class="game-picker-subtitle">Find games we all own and pick what to play next!</p>
+            
+            <!-- Password Protection -->
+            <div id="password-screen" class="password-screen">
+                <div class="password-form">
+                    <i class="fas fa-lock password-icon"></i>
+                    <h3>Squad Members Only</h3>
+                    <p>Enter the squad password to access the game picker</p>
+                    <input type="password" id="access-password" placeholder="Enter password">
+                    <button id="unlock-btn" class="unlock-btn">
+                        <i class="fas fa-unlock-alt"></i> Unlock Game Picker
+                    </button>
+                    <div id="password-error" class="password-error"></div>
+                </div>
+            </div>
+            
+            <!-- Game Picker Interface (Hidden Initially) -->
+            <div id="game-picker-interface" class="game-picker-interface" style="display: none;">
+                <!-- Loading State -->
+                <div id="loading-screen" class="loading-screen">
+                    <div class="loading-spinner"></div>
+                    <p>Fetching squad game libraries...</p>
+                    <div class="loading-progress">
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <span id="progress-text">0/4 players loaded</span>
+                    </div>
+                </div>
+                
+                <!-- Game Results -->
+                <div id="game-results" class="game-results" style="display: none;">
+                    <div class="game-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-users"></i>
+                            <span class="stat-number" id="players-count">4</span>
+                            <span class="stat-label">Squad Members</span>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-gamepad"></i>
+                            <span class="stat-number" id="common-games-count">0</span>
+                            <span class="stat-label">Common Games</span>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-random"></i>
+                            <span class="stat-number" id="picks-count">0</span>
+                            <span class="stat-label">Games Picked</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Current Pick Display -->
+                    <div id="current-pick" class="current-pick" style="display: none;">
+                        <div class="pick-card">
+                            <div class="pick-image-container">
+                                <img id="pick-image" class="pick-image" src="" alt="">
+                                <div class="pick-image-fallback" style="display: none;">
+                                    <i class="fas fa-gamepad"></i>
+                                    <span>No Image Available</span>
+                                </div>
+                            </div>
+                            <div class="pick-info">
+                                <h3 id="pick-name" class="pick-name"></h3>
+                                <div id="pick-genres" class="pick-genres"></div>
+                                <div class="pick-actions">
+                                    <button id="steam-link-btn" class="steam-link-btn">
+                                        <i class="fab fa-steam"></i> View on Steam
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="picker-actions">
+                        <button id="pick-random-btn" class="pick-random-btn">
+                            <i class="fas fa-dice"></i> Pick Random Game
+                        </button>
+                        <button id="show-all-btn" class="show-all-btn">
+                            <i class="fas fa-list"></i> Show All Games
+                        </button>
+                    </div>
+                    
+                    <!-- Game Filter Tabs -->
+                    <div id="game-filter-tabs" class="game-filter-tabs" style="display: none;">
+                        <div class="filter-tabs-row">
+                            <button class="filter-tab active" data-filter="multiplayer">
+                                <i class="fas fa-users"></i> Multiplayer Games
+                            </button>
+                            <button class="filter-tab" data-filter="singleplayer">
+                                <i class="fas fa-user"></i> Single Player Games
+                            </button>
+                            <button class="filter-tab" data-filter="all">
+                                <i class="fas fa-gamepad"></i> All Games
+                            </button>
+                        </div>
+                        <div class="filter-controls-row">
+                            <button id="view-toggle-btn" class="view-toggle-btn">
+                                <i class="fas fa-list"></i> List View
+                            </button>
+                            <button id="refresh-btn" class="refresh-btn">
+                                <i class="fas fa-sync-alt"></i> Refresh Libraries
+                            </button>
+                            <button id="clear-omits-btn" class="clear-omits-btn">Include all</button>
+                        </div>
+                    </div>
+                    
+                    <!-- All Games List (Hidden by default) -->
+                    <div id="all-games-list" class="all-games-list" style="display: none;">
+                        <h3>All Common Games</h3>
+                        <div id="games-grid" class="games-grid">
+                            <!-- Games will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Error State -->
+                <div id="error-screen" class="error-screen" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Oops! Something went wrong</h3>
+                    <p id="error-message">Failed to load game libraries. Please try again.</p>
+                    <button id="retry-btn" class="retry-btn">
+                        <i class="fas fa-redo"></i> Try Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Contact Form Section -->
     <section id="contact" class="contact-form-section">
@@ -304,6 +436,8 @@
     </footer>
 
     <!-- JavaScript -->
+    <script src="config.js"></script>
+    <script src="game-picker.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

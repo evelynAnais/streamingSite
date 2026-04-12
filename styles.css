@@ -1185,3 +1185,861 @@ footer p {
   height: 6px;
   box-shadow: 0 0 8px currentColor;
 }
+
+/* Game Picker Section */
+.game-picker-section {
+  padding: 80px 0;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  position: relative;
+}
+
+.game-picker-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.game-picker-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+}
+
+/* Password Protection */
+.password-screen {
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.password-form {
+  background: var(--bg-secondary);
+  padding: 3rem 2rem;
+  border-radius: 20px;
+  border: 1px solid var(--primary-color);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.password-icon {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.password-form h3 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-family: "Orbitron", monospace;
+}
+
+.password-form p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+#access-password {
+  width: 100%;
+  padding: 1rem;
+  background: var(--bg-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+#access-password:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 20px rgba(98, 255, 255, 0.3);
+}
+
+.unlock-btn {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: var(--primary-gradient);
+  border: none;
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+.unlock-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(98, 255, 255, 0.3);
+}
+
+.password-error {
+  display: none;
+  color: #ff6b6b;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background: rgba(255, 107, 107, 0.1);
+  border-radius: 5px;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+/* Loading Screen */
+.loading-screen {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 3px solid rgba(98, 255, 255, 0.3);
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 2rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-progress {
+  max-width: 300px;
+  margin: 2rem auto 0;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary-gradient);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Game Results */
+.game-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: var(--bg-secondary);
+  padding: 2rem 1rem;
+  border-radius: 15px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary-color);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.stat-card i {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--text-primary);
+  font-family: "Orbitron", monospace;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Current Pick */
+.current-pick {
+  margin-bottom: 3rem;
+}
+
+.pick-card {
+  background: var(--bg-secondary);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.pick-card.pick-animation {
+  animation: pickReveal 0.6s ease-out;
+}
+
+@keyframes pickReveal {
+  0% {
+    transform: scale(0.8) rotateY(90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+.pick-image {
+  width: 200px;
+  height: 120px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.pick-info {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+.pick-name {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-family: "Orbitron", monospace;
+}
+
+.pick-genres {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.steam-link-btn {
+  background: #1b2838;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.steam-link-btn:hover {
+  background: #2a475e;
+  transform: translateY(-2px);
+}
+
+/* Action Buttons */
+.picker-actions {
+  display: none;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.picker-actions button {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+}
+
+.pick-random-btn {
+  background: var(--primary-gradient);
+  color: var(--text-primary);
+}
+
+.pick-random-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(98, 255, 255, 0.4);
+}
+
+.show-all-btn, .refresh-btn, .view-toggle-btn {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.show-all-btn:hover, .refresh-btn:hover, .view-toggle-btn:hover {
+  background: var(--bg-primary);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+/* All Games List */
+.all-games-list {
+  margin-top: 3rem;
+}
+
+.all-games-list h3 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--text-primary);
+  font-family: "Orbitron", monospace;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* List View Styles */
+.games-grid.list-view {
+  grid-template-columns: 1fr;
+  gap: 0.25rem;
+}
+
+.games-grid.list-view .game-card {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  min-height: auto;
+}
+
+.games-grid.list-view .game-image-container {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  margin-right: 0.75rem;
+}
+
+.games-grid.list-view .game-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.games-grid.list-view .game-image-fallback {
+  width: 40px;
+  height: 40px;
+  font-size: 0.8rem;
+}
+
+.games-grid.list-view .game-image-fallback i {
+  font-size: 1rem;
+}
+
+.games-grid.list-view .game-info {
+  flex-shrink: 0;
+  min-width: 0;
+  margin-right: 0.75rem;
+}
+
+.games-grid.list-view .game-title {
+  flex: 1;
+  min-width: 0;
+  margin-right: 0.75rem;
+}
+
+.games-grid.list-view .game-title h4 {
+  font-size: 1rem;
+  margin-bottom: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.games-grid.list-view .card-player-hours {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  min-width: 160px;
+  flex-shrink: 0;
+}
+
+.games-grid.list-view .card-hour-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: none;
+  font-size: 0.85rem;
+  line-height: 1.1;
+}
+
+.games-grid.list-view .card-player-name {
+  font-weight: 500;
+}
+
+.games-grid.list-view .card-player-time {
+  opacity: 0.8;
+}
+
+.games-grid.list-view .card-actions {
+  margin-left: 0.75rem;
+}
+
+.games-grid.list-view .card-actions .omit-btn {
+  padding: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.games-grid.list-view .multiplayer-badge {
+  position: relative;
+  top: auto;
+  right: auto;
+  margin-right: 0.4rem;
+  order: -1;
+  padding: 0.15rem 0.3rem;
+  font-size: 0.7rem;
+}
+
+.game-card {
+  position: relative;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--primary-color);
+  box-shadow: 0 10px 30px rgba(98, 255, 255, 0.2);
+}
+
+.game-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.game-info {
+  padding: 1rem;
+}
+
+.game-info h4 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.game-info p {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+/* Error Screen */
+.error-screen {
+  text-align: center;
+  padding: 3rem 0;
+  color: var(--text-secondary);
+}
+
+.error-screen i {
+  font-size: 4rem;
+  color: #ff6b6b;
+  margin-bottom: 1rem;
+}
+
+.retry-btn {
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  background: var(--primary-gradient);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.retry-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(98, 255, 255, 0.3);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .game-picker-container {
+    padding: 0 1rem;
+  }
+  
+  .pick-card {
+    flex-direction: column;
+  }
+  
+  .pick-image {
+    width: 100%;
+    height: 200px;
+  }
+  
+  .picker-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .picker-actions button {
+    justify-content: center;
+  }
+  
+  .games-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  
+  .game-stats {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+  }
+  
+  .stat-card {
+    padding: 1.5rem 0.5rem;
+  }
+}
+
+/* Player Hours Display */
+.player-hours {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.player-hour-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid var(--primary-color);
+}
+
+.player-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.player-time {
+  font-weight: bold;
+  color: var(--primary-color);
+  font-family: "Orbitron", monospace;
+}
+
+.player-time.never-played {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Mobile responsive for player hours */
+@media (max-width: 480px) {
+  .player-hour-item {
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+  }
+}
+
+/* Game Card Player Hours */
+.card-player-hours {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.card-hour-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.card-player-name {
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.card-player-time {
+  color: var(--primary-color);
+  font-weight: bold;
+  font-family: "Orbitron", monospace;
+}
+
+.card-player-time.zero-hours {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* Image Containers and Fallbacks */
+.game-image-container, .pick-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.game-image-container {
+  height: 120px;
+  background: var(--bg-primary);
+}
+
+.pick-image-container {
+  width: 200px;
+  height: 120px;
+  align-self: center;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px; /* Add padding for spacing from edges */
+}
+
+.pick-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Changed from cover to contain for centering */
+  border-radius: 8px; /* Add slight rounding for better appearance */
+}
+
+.game-image-fallback, .pick-image-fallback {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  color: var(--text-secondary);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+.game-image-fallback i, .pick-image-fallback i {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.game-image-fallback span, .pick-image-fallback span {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.pick-image-fallback i {
+  font-size: 3rem;
+}
+
+.pick-image-fallback span {
+  font-size: 0.9rem;
+}
+
+/* Update existing game card image styles */
+.game-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.game-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Update pick card layout for container */
+.pick-card {
+  background: var(--bg-secondary);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Game Filter Tabs */
+.game-filter-tabs {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.filter-tabs-row {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-controls-row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-tab {
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-tab:hover {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.filter-tab.active {
+  background: var(--primary-gradient);
+  color: var(--text-primary);
+  border-color: var(--primary-color);
+}
+
+/* Style view-toggle and refresh buttons like filter tabs when in filter section */
+.filter-controls-row .view-toggle-btn,
+.filter-controls-row .refresh-btn {
+  padding: 0.75rem 1.5rem;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-controls-row .view-toggle-btn:hover,
+.filter-controls-row .refresh-btn:hover {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transform: none;
+}
+
+/* Omit Controls */
+
+.clear-omits-btn {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.85rem;
+}
+
+.clear-omits-btn:hover {
+  background: rgba(255, 107, 107, 0.3);
+}
+
+/* Multiplayer Badge */
+.multiplayer-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: var(--primary-color);
+  color: var(--bg-primary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Game Card Actions */
+.card-actions {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 2;
+}
+
+.omit-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+.omit-btn:hover {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* Omitted Game Styling */
+.game-card.omitted {
+  opacity: 0.5;
+  filter: grayscale(50%);
+}
+
+.game-card.omitted::after {
+  content: "EXCLUDED";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 107, 107, 0.9);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  z-index: 3;
+}
+
+/* Mobile responsive for new elements */
+@media (max-width: 768px) {
+  .game-filter-tabs {
+    flex-direction: column;
+  }
+  
+  .filter-tab {
+    justify-content: center;
+  }
+  
+  .omit-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .multiplayer-badge {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.4rem;
+  }
+}
