@@ -146,7 +146,7 @@ class GamePicker {
     try {
       // Try localhost first (if running locally), then production
       const authUrls = [
-        `http://localhost:3000/api/authenticate?password=${encodeURIComponent(enteredPassword)}`,
+        // `http://localhost:3000/api/authenticate?password=${encodeURIComponent(enteredPassword)}`,
         `https://steam-cors-proxy-beta.vercel.app/api/authenticate?password=${encodeURIComponent(enteredPassword)}`,
       ];
 
