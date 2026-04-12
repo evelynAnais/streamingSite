@@ -37,6 +37,7 @@
         <div class="mobile-nav-links" id="mobileNavLinks">
             <a href="#home">Home</a>
             <a href="#about">Meet the Team</a>
+            <a href="#game-picker">Game Picker</a>
             <a href="#contact">Contact</a>
         </div>
     </nav>
@@ -54,7 +55,7 @@
         </div>
         
         <!-- Floating Gaming Icons -->
-        <div class="floating-icons">
+        <!-- <div class="floating-icons">
             <div class="gaming-icon-float" style="--delay: 0s; --duration: 3s;">
                 <i class="fas fa-gamepad"></i>
             </div>
@@ -79,7 +80,7 @@
             <div class="gaming-icon-float" style="--delay: 1.2s; --duration: 3.3s;">
                 <i class="fas fa-bolt"></i>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- Hero + Links Combined Section -->
@@ -253,6 +254,192 @@
         </div>
     </section>
 
+    <!-- Game Picker Section -->
+    <section id="game-picker" class="game-picker-section">
+        <div class="game-picker-container">
+            <h2 class="section-title">🎮 Squad Game Picker</h2>
+            <p class="game-picker-subtitle">Find games we all own and pick what to play next!</p>
+            
+            <!-- Password Modal -->
+            <div id="password-modal" class="password-modal" style="display: none;">
+                <div class="password-modal-content">
+                    <div class="password-modal-header">
+                        <h3>🔐 Enter Squad Password</h3>
+                        <button id="close-modal" class="close-modal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <p>Access our private Steam libraries</p>
+                    <div class="password-input-group">
+                        <input type="password" id="squad-password" placeholder="Enter password...">
+                        <button id="unlock-squad" class="btn btn-primary">
+                            <i class="fas fa-unlock"></i> Unlock
+                        </button>
+                    </div>
+                    <div id="password-error" class="password-error" style="display: none;"></div>
+                </div>
+            </div>
+            
+            <!-- Customize Players Modal -->
+            <div id="customize-players-modal" class="password-modal" style="display: none;">
+                <div class="password-modal-content customize-modal">
+                    <div class="password-modal-header">
+                        <h3>🎮 Customize Player Group</h3>
+                        <button id="close-customize-modal" class="close-modal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <p>Enter Steam IDs for 2-6 players to find common games. <strong>At least 2 players are required.</strong></p>
+                    <div class="player-inputs-container">
+                        <div class="player-input-row required">
+                            <label>Player 1: <span class="required-indicator">*</span></label>
+                            <input type="text" id="player-name-0" placeholder="Player Name" class="player-name-input">
+                            <input type="text" id="player-id-0" placeholder="Steam ID or Profile URL" class="player-id-input" required>
+                        </div>
+                        <div class="player-input-row required">
+                            <label>Player 2: <span class="required-indicator">*</span></label>
+                            <input type="text" id="player-name-1" placeholder="Player Name" class="player-name-input">
+                            <input type="text" id="player-id-1" placeholder="Steam ID or Profile URL" class="player-id-input" required>
+                        </div>
+                        <div class="player-input-row">
+                            <label>Player 3:</label>
+                            <input type="text" id="player-name-2" placeholder="Player Name" class="player-name-input">
+                            <input type="text" id="player-id-2" placeholder="Steam ID or Profile URL" class="player-id-input">
+                        </div>
+                        <div class="player-input-row">
+                            <label>Player 4:</label>
+                            <input type="text" id="player-name-3" placeholder="Player Name" class="player-name-input">
+                            <input type="text" id="player-id-3" placeholder="Steam ID or Profile URL" class="player-id-input">
+                        </div>
+                        <div class="player-input-row">
+                            <label>Player 5:</label>
+                            <input type="text" id="player-name-4" placeholder="Player Name" class="player-name-input">
+                            <input type="text" id="player-id-4" placeholder="Steam ID or Profile URL" class="player-id-input">
+                        </div>
+                        <div class="player-input-row">
+                            <label>Player 6:</label>
+                            <input type="text" id="player-name-5" placeholder="Player Name" class="player-name-input">
+                            <input type="text" id="player-id-5" placeholder="Steam ID or Profile URL" class="player-id-input">
+                        </div>
+                    </div>
+                    <div class="customize-modal-actions">
+                        <button id="reset-to-defaults" class="btn btn-secondary">
+                            <i class="fas fa-undo"></i> Use Default Squad
+                        </button>
+                        <button id="fetch-custom-libraries" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Get Game Libraries
+                        </button>
+                    </div>
+                    <div id="customize-error" class="password-error" style="display: none;"></div>
+                </div>
+            </div>
+            
+            <!-- Game Picker Interface -->
+            <div id="game-picker-interface" class="game-picker-interface">
+                <!-- Loading State -->
+                <div id="loading-screen" class="loading-screen">
+                    <div class="loading-spinner"></div>
+                </div>
+                
+                <!-- Game Results -->
+                <div id="game-results" class="game-results" style="display: none;">
+                    <div id="data-mode-indicator" class="data-mode-indicator"></div>
+                    
+                    <div class="game-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-users"></i>
+                            <span class="stat-number" id="players-count">4</span>
+                            <span class="stat-label">Squad Members</span>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-gamepad"></i>
+                            <span class="stat-number" id="common-games-count">0</span>
+                            <span class="stat-label">Common Games</span>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-random"></i>
+                            <span class="stat-number" id="picks-count">0</span>
+                            <span class="stat-label">Games Picked</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Current Pick Display -->
+                    <div id="current-pick" class="current-pick" style="display: none;">
+                        <div class="pick-card">
+                            <div class="pick-image-container">
+                                <img id="pick-image" class="pick-image" src="" alt="">
+                                <div class="pick-image-fallback" style="display: none;">
+                                    <i class="fas fa-gamepad"></i>
+                                    <span>No Image Available</span>
+                                </div>
+                            </div>
+                            <div class="pick-info">
+                                <h3 id="pick-name" class="pick-name"></h3>
+                                <div id="pick-genres" class="pick-genres"></div>
+                                <div class="pick-actions">
+                                    <button id="steam-link-btn" class="steam-link-btn">
+                                        <i class="fab fa-steam"></i> View on Steam
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="picker-actions">
+                        <button id="pick-random-btn" class="pick-random-btn">
+                            <i class="fas fa-dice"></i> Pick Random Game
+                        </button>
+                        <button id="show-all-btn" class="show-all-btn">
+                            <i class="fas fa-list"></i> Show All Games
+                        </button>
+                    </div>
+                    
+                    <!-- Game Filter Tabs -->
+                    <div id="game-filter-tabs" class="game-filter-tabs" style="display: none;">
+                        <div class="filter-tabs-row">
+                            <button class="filter-tab active" data-filter="multiplayer">
+                                <i class="fas fa-users"></i> Multiplayer Games
+                            </button>
+                            <button class="filter-tab" data-filter="singleplayer">
+                                <i class="fas fa-user"></i> Single Player Games
+                            </button>
+                            <button class="filter-tab" data-filter="all">
+                                <i class="fas fa-gamepad"></i> All Games
+                            </button>
+                        </div>
+                        <div class="filter-controls-row">
+                            <button id="view-toggle-btn" class="view-toggle-btn">
+                                <i class="fas fa-list"></i> List View
+                            </button>
+                            <button id="refresh-btn" class="refresh-btn">
+                                <i class="fas fa-sync-alt"></i> Refresh Libraries
+                            </button>
+                            <button id="clear-omits-btn" class="clear-omits-btn">Include all</button>
+                        </div>
+                    </div>
+                    
+                    <!-- All Games List (Hidden by default) -->
+                    <div id="all-games-list" class="all-games-list" style="display: none;">
+                        <h3>All Common Games</h3>
+                        <div id="games-grid" class="games-grid">
+                            <!-- Games will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Error State -->
+                <div id="error-screen" class="error-screen" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Oops! Something went wrong</h3>
+                    <p id="error-message">Failed to load game libraries. Please try again.</p>
+                    <button id="retry-btn" class="retry-btn">
+                        <i class="fas fa-redo"></i> Try Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Contact Form Section -->
     <section id="contact" class="contact-form-section">
@@ -304,6 +491,8 @@
     </footer>
 
     <!-- JavaScript -->
+    <script src="config.js"></script>
+    <script src="game-picker.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
